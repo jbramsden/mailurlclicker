@@ -90,5 +90,16 @@ I wrote an article https://www.linkedin.com/pulse/how-i-proved-cancel-brexit-pet
             }
         }
     ]
-}```
+}
+```
+
+7) To run: `./guerrillad serve`
+
+## Configuring DNS
+For this you will need a Domain name which is currently not being used for Mail already. 
+1) Create a A record with the hostname of mail and the content being the IP address of the server
+2) Create a MX record with the hostname of @ and the content being mail.YOURDOMAINNAME. E.G. in my example it is mail.bettybot.co.uk
+
+## To test
+To test just send an email to any email address for you domain with a URL in the body of the message. When it is received by Go-Guerrillad you should see a lot of information from chrome and on the last line you will see the HTML page title of the URL.
 
