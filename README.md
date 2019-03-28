@@ -35,7 +35,7 @@ I wrote an article https://www.linkedin.com/pulse/how-i-proved-cancel-brexit-pet
 5) Go-guerrilla needs a TLS public and private key to work, so as the root user run: 
 `openssl req -newkey rsa:4096 -nodes -sha512 -x509 -days 3650 -nodes -out /etc/ssl/certs/mailserver.pem -keyout /etc/ssl/private/mailserver.pem`
 6) Create a goguerrilla.conf.json file where guerrillad binary is located.
-`{
+```{
     "log_file" : "stderr",
     "log_level" : "info",
     "allowed_hosts": [
@@ -90,6 +90,5 @@ I wrote an article https://www.linkedin.com/pulse/how-i-proved-cancel-brexit-pet
             }
         }
     ]
-}`
+}```
 
-7) Run ./guerrillad serve
