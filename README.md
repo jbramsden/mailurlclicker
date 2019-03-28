@@ -32,5 +32,64 @@ I wrote an article https://www.linkedin.com/pulse/how-i-proved-cancel-brexit-pet
    ln -s /etc/alternatives/google-chrome chrome
 3) Create a linux user called chrome. This is required as Chrome does not run in headless on the Root user
 4) To start Chrome on reboot add the following crontab for the chrome user: @reboot chrome --headless --disable-gpu --remote-debugging-port=9222 https://www.chromestatus.com
-5) 
+5) Go-guerrilla needs a TLS public and private key to work, so as the root user run: 
+openssl req -newkey rsa:4096 -nodes -sha512 -x509 -days 3650 -nodes -out /etc/ssl/certs/mailserver.pem -keyout /etc/ssl/private/mailserver.pem
+6) Create a goguerrilla.conf.json file where guerrillad binary is located.
+{
+    "log_file" : "stderr",
+    "log_level" : "info",
+    "allowed_hosts": [
+      "bettybot.co.uk"
+    ],
+    "pid_file" : "/var/run/go-guerrilla.pid",
+    "backend_config": {
+        "log_received_mails": true,
+        "save_workers_size": 1,
+        "save_process" : "HeadersParser|Header|URLParser",
+        "primary_mail_host" : "mail.example.com",
+        "gw_save_timeout" : "30s",
+        "gw_val_rcpt_timeout" : "3s"
+    },
+    "servers" : [
+        {
+            "is_enabled" : true,
+            "host_name":"mail.bettybot.co.uk",
+            "max_size": 1000000,
+            "timeout":180,
+            "listen_interface":"10.15.119.145:25",
+            "max_clients": 1000,
+            "log_file" : "stderr",
+            "tls" : {
+                "start_tls_on":true,
+                "tls_always_on":false,
+                "public_key_file":"/etc/ssl/certs/mailserver.pem",
+                "private_key_file":"/etc/ssl/private/mailserver.pem",
+                "protocols" : ["ssl3.0", "tls1.2"],
+                "ciphers" : ["TLS_FALLBACK_SCSV", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305", "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305", "TLS_RSA_WITH_RC4_128_SHA", "TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA", "TLS_ECDHE_RSA_WITH_RC4_128_SHA", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"],
+                "curves" : ["P256", "P384", "P521", "X25519"],
+                "client_auth_type" : "NoClientCert"
+            }
+        },
+        {
+            "is_enabled" : false,
+            "host_name":"mail.bettybot.co.uk",
+            "max_size":1000000,
+            "timeout":180,
+            "listen_interface":"10.15.119.145:465",
+            "max_clients":500,
+            "log_file" : "stderr",
+            "tls" : {
+                "public_key_file":"/etc/ssl/certs/mailserver.pem",
+                "private_key_file":"/etc/ssl/private/mailserver.pem",
+                 "start_tls_on":false,
+                 "tls_always_on":true,
+                 "protocols" : ["ssl3.0", "tls1.2"],
+                 "ciphers" : ["TLS_FALLBACK_SCSV", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305", "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305", "TLS_RSA_WITH_RC4_128_SHA", "TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA", "TLS_ECDHE_RSA_WITH_RC4_128_SHA", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"],
+                 "curves" : ["P256", "P384", "P521", "X25519"],
+                 "client_auth_type" : "NoClientCert"
+            }
+        }
+    ]
+}
 
+7) Run ./guerrillad serve
