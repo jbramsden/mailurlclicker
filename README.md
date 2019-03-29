@@ -8,6 +8,7 @@ I wrote an article https://www.linkedin.com/pulse/how-i-proved-cancel-brexit-pet
 1) Server to host Go-Guerrilla
 2) Domain name which has not already had a MX record set in the DNS
 3) Headless Chrome 
+4) Golang development language.
 
 ## Building go-guerrilla
 1) Download go-guerrilla `go get github.com/flashmob/go-guerrilla`
