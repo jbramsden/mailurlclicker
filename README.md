@@ -10,7 +10,7 @@ I wrote an article https://www.linkedin.com/pulse/how-i-proved-cancel-brexit-pet
 3) Headless Chrome 
 
 ## Building go-guerrilla
-1) Download go-guerrilla 
+1) Download go-guerrilla `go get github.com/flashmob/go-guerrilla`
 2) Copy p_url.go into the backends directory on go-guerrilla. Not sure if this is the correct way of doing it but it worked for me.
 3) In the backends directory perform a go get to get all the libraries required for p_url.go
 4) I editted the Makefile in the go-guerrilla root directory as I need it create a binary for Linux, as that is what the server is running, and I added flags which removed debug information from the compiled binary to make it smaller in size. The following lines were changed:
